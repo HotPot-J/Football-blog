@@ -1,0 +1,252 @@
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>HotPot-J BLOG</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="editor/css/editormd.preview.css" />
+</head>
+
+<body id="blog">
+  <div id="my">
+<header class="am-g am-g-fixed blog-fixed blog-text-center blog-header">
+</header>
+<hr>
+<!-- nav start -->
+<nav class="am-g am-g-fixed blog-fixed blog-nav">
+<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only blog-button" data-am-collapse="{target: '#blog-collapse'}" ><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="blog-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li class="am-active"><a href="lw-index.html">首页</a></li>
+      <li class="am-dropdown" data-am-dropdown>
+        <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          首页布局 <span class="am-icon-caret-down"></span>
+        </a>
+        <ul class="am-dropdown-content">
+          <li><a href="lw-index.html">1. blog-index-standard</a></li>         
+          <li><a href="lw-index-nosidebar.html">2. blog-index-nosidebar</a></li>
+          <li><a href="lw-index-center.html">3. blog-index-layout</a></li>
+          <li><a href="lw-index-noslider.html">4. blog-index-noslider</a></li>
+        </ul>
+      </li>
+      <li><a href="lw-article.html">标准文章</a></li>
+      <li><a href="lw-img.html">图片库</a></li>
+      <li><a href="lw-article-fullwidth.html">全宽页面</a></li>
+      <li><a href="lw-timeline.html">存档</a></li>
+    </ul>
+    <form class="am-topbar-form am-topbar-right am-form-inline" role="search">
+      <div class="am-form-group">
+        <input type="text" class="am-form-field am-input-sm" placeholder="搜索">
+      </div>
+    </form>
+  </div>
+</nav>
+<hr>
+<!-- nav end -->
+<!-- banner start -->
+<div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-article-margin">
+    <div data-am-widget="slider" class="am-slider am-slider-b1" data-am-slider='{&quot;controlNav&quot;:false}' >
+    <ul class="am-slides">
+    </ul>
+    </div>
+</div>
+<!-- banner end -->
+
+<!-- content srart -->
+<div class="am-g am-g-fixed blog-fixed">
+    <div class="am-u-md-8 am-u-sm-12" v-if=" S_blog.id==null">  <!--if sblog为空 展示标题界面（未点击标签）-->>
+<!--v-for 循环获取blogs信息--v-if 当其他两个ajax异步请求成功 再去加载-->
+        <article class="am-g blog-entry-article" v-for="blog in blogs" v-show="tags.length>0&&users.length>0">
+            <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">
+                <img src="assets/i/f6.jpg" alt="" class="am-u-sm-12">
+            </div>
+            <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
+                <span><a href="" class="blog-color">{{get_tagNameById(blog.tag_id)}}&nbsp;</a></span>
+                <span>{{get_userNameById(blog.user_id)}} &nbsp;</span>
+                <span>{{blog.ctime}}</span>
+                <!--点级标签 则Sblog！=null 渲染博客正文界面 #表示不使用模板中的点击事件 使用自己的-->
+                <h1><a href="#" v-on:click="ShowBlog(blog)">{{blog.title}}</a></h1>
+            </div>
+        </article>
+        
+        <ul class="am-pagination">
+  <li class="am-pagination-prev"><a href="">&laquo; Prev</a></li>
+  <li class="am-pagination-next"><a href="">Next &raquo;</a></li>
+</ul>
+    </div>
+    <!--对应markdown界面 显示blog_content-->
+    <div id="test-editormd-view" class="am-u-md-8 am-u-sm-12" v-show="S_blog.id!=null"> <!--else 点击了标签以后-->
+      <textarea style="display: none;"name="test-editormd-markdown-doc" v-model="S_blog.content"></textarea>
+    </div>
+
+    <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
+        <div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-text-center blog-title"><span>About ME</span></h2>
+            <img src="assets/i/f14.jpg" alt="about me" class="blog-entry-img" >
+            <p>HotPot-J</p>
+            <p>我是HotPot-J </p>
+            <p>{{message}}</p>
+        </div>
+
+        <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
+            <h2 class="blog-title"><span>TAG cloud</span></h2>
+            <div class="am-u-sm-12 blog-clear-padding">
+            <a href="" class="blog-tag" v-for="tag in tags">{{tag.name}}</a>
+            <!-- a href="" class="blog-tag">football</a-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- content end -->
+
+
+
+  <footer class="blog-footer">
+    <div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-footer-padding">
+        
+        
+    </div>    
+    <div class="blog-text-center">© 2020 HotPot-J </div>    
+  </footer>
+</div>
+<!--[if (gte IE 9)|!(IE)]><!-->
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script src="editor/lib/marked.min.js"></script>
+<script src="editor/lib/prettify.min.js"></script>
+<script src="editor/lib/raphael.min.js"></script>
+<script src="editor/lib/underscore.min.js"></script>
+<script src="editor/lib/sequence-diagram.min.js"></script>
+<script src="editor/lib/flowchart.min.js"></script>
+<script src="editor/lib/jquery.flowchart.min.js"></script>
+<script src="editor/editormd.js"></script>
+
+    <script>
+        var my = new Vue({
+            el: '#my',
+            data:{
+                message:"Hello!",
+                blogs:[],
+                tags:[],
+                users:[],
+                S_blog:{
+                  id:null,
+                  tag_id:null,
+                  user_id:null,
+                  title:null,
+                  content:null
+                }
+            },
+            methods:{
+              //查询所有博客
+              get_allblogs:function(){
+                //使用ajax发起异步请求
+                $.ajax(
+                  {
+                    //路径
+                    url:"/blog",
+                    //请求方法
+                    type:"get",
+                    //为所有 AJAX 相关的回调函数规定 "this" 值，这里就是vue对象
+                    context:this,
+                    //当请求成功时运行的函数。
+                    success:function(result,status) //第一个参数是获取到的结果 第二个参数是响应状态码
+                    {
+                      this.blogs = result;//将返回结果赋值给vue对象中的blogs对象
+                    }
+                  }  
+                )
+              },
+              //查询所有标签
+              get_alltags:function(){
+                  $.ajax(
+                    {
+                      url:"/tag",
+                      type:"get",
+                      context:this,
+                      success:function(result,status)
+                      {
+                        this.tags = result;
+                      }
+                    }
+                  )
+              },
+              get_allusers:function(){
+                  $.ajax(
+                    {
+                      url:"/user",
+                      type:"get",
+                      context:this,
+                      success:function(result,status)
+                      {
+                        this.users = result;
+                      }
+                    }
+                  )
+              },
+              get_userNameById:function(id){
+                //遍历已查询到的users结果集 匹配与id相等的姓名并返回
+                for(var i = 0;i<this.users.length;i++){
+                  if(this.users[i].id==id){
+                    return this.users[i].name;
+                  }
+                }
+              },
+              get_tagNameById:function(id){
+                //遍历已查询到的users结果集 匹配与id相等的姓名并返回
+                for(var i = 0;i<this.tags.length;i++){
+                  if(this.tags[i].id==id){
+                    return this.tags[i].name;
+                  }
+                }
+              },
+              ShowBlog:function(blog){
+                this.S_blog = blog;
+                testEditormdView = editormd.markdownToHTML
+                ("test-editormd-view", //""中对于html中的容器id
+                  {
+                     markdown        :blog.content,//具体的markdown数据 也就是博客内容
+                     htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                     tocm            : true,      
+                     emoji           : true,
+                     taskList        : true,
+                     tex             : true,  // 默认不解析
+                     flowChart       : true,  // 默认不解析
+                     sequenceDiagram : true,  // 默认不解析
+                  }
+                );
+              }
+            }
+        });
+        //调用请求函数
+        my.get_alltags();
+        my.get_allusers();
+        my.get_allblogs();
+    </script>
+</body>
+</html>
